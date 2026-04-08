@@ -383,7 +383,7 @@ const ResumeViewer = () => {
         {/* The Embedded Viewer */}
         <div className="w-full h-[80vh] min-h-[800px] rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-2 bg-surface-container-low/50">
           <iframe 
-            src="/Resume.pdf" 
+            src="/resume.pdf" 
             title="Sourabh Singh Resume"
             className="w-full h-full rounded-[1.5rem] bg-white"
             style={{ border: 'none' }}
@@ -393,7 +393,7 @@ const ResumeViewer = () => {
         {/* Fallback Download Button (Crucial for mobile users) */}
         <div className="mt-8 flex justify-center">
           <a 
-            href="/Resume.pdf" 
+            href="/resume.pdf" 
             download="Resume.pdf"
             className="flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-black text-sm tracking-widest uppercase rounded-full hover:bg-white/10 transition-all backdrop-blur-md"
           >
