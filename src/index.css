@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-background: #141124;
+  --color-on-background: #e6dffb;
+  --color-surface: #141124;
+  --color-on-surface: #e6dffb;
+  --color-on-surface-variant: #ccc3d7;
+  --color-surface-container-lowest: #0f0b1f;
+  --color-surface-container-low: #1c192d;
+  --color-surface-container: #201d31;
+  --color-surface-container-high: #2b273c;
+  --color-surface-container-highest: #363247;
+  --color-surface-bright: #3a364c;
+  --color-surface-variant: #363247;
+  
+  --color-primary: #d1bcff;
+  --color-primary-container: #a178ff;
+  --color-on-primary: #3c0090;
+  --color-on-primary-container: #34007f;
+  
+  --color-secondary: #5de6ff;
+  --color-secondary-container: #00cbe6;
+  --color-on-secondary-container: #00515d;
+  
+  --color-tertiary: #fbabff;
+  --color-tertiary-container: #e14ef6;
+  --color-on-tertiary-container: #4d0059;
+  
+  --color-outline-variant: #4a4455;
+  
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+
+  /* NEW: The shifting gradient animation for your name */
+  --animate-gradient: gradient 4s linear infinite;
+}
+
+/* NEW: The keyframes that move the background colors */
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-sans overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(54, 50, 71, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .text-glow-gradient {
+    background: linear-gradient(90deg, #d1bcff, #5de6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px rgba(209, 188, 255, 0.3));
+  }
+
+  .neon-overline {
+    text-shadow: 0 0 12px rgba(93, 230, 255, 0.8);
+  }
+
+  .premium-card-border {
+    position: relative;
+    background: rgba(20, 17, 36, 0.8);
+    border: 1px solid rgba(209, 188, 255, 0.1);
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-container-highest rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-outline-variant;
+}
