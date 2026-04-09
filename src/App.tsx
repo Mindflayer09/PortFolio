@@ -30,21 +30,17 @@ const Navbar = () => {
 
   const closeMenu = () => setIsOpen(false);
 
-  // THE MAGIC FIX: A custom scroll handler with a tiny delay
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    e.preventDefault(); // Stop the browser's default jumping behavior
-    setIsOpen(false); // Close the mobile menu immediately
+    e.preventDefault(); 
+    setIsOpen(false); 
 
-    // Wait 150ms for the menu to finish closing and the DOM to settle
     setTimeout(() => {
       const element = document.getElementById(targetId);
       if (element) {
-        const navbarHeight = 80; // The height of your glass navbar
-        // Calculate exact position relative to the document
+        const navbarHeight = 80; 
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.scrollY - navbarHeight;
 
-        // Force the window to scroll
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
@@ -54,7 +50,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(145,94,255,0.15)]">
+    <nav className="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(145,94,255,0.15)] border-b border-white/5">
       <div className="flex justify-between items-center w-full px-5 md:px-8 py-4 max-w-full mx-auto relative z-50">
         
         {/* Logo */}
@@ -109,7 +105,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden absolute top-full left-0 w-full bg-[#0a081a]/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl z-40"
+            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl z-40"
           >
             <div className="flex flex-col items-center py-8 gap-5 font-sans tracking-widest text-sm uppercase font-bold">
               <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'about')}>About</a>
@@ -118,7 +114,7 @@ const Navbar = () => {
               <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'contact')}>Contact</a>
               
               <a 
-                className="mt-2 px-8 py-3 bg-[#c4a5ff] text-[#0a081a] font-black rounded-full hover:bg-[#d6c1ff] transition-all shadow-[0_0_15px_rgba(196,165,255,0.3)] cursor-pointer" 
+                className="mt-2 px-8 py-3 bg-[#c4a5ff] text-black font-black rounded-full hover:bg-[#d6c1ff] transition-all shadow-[0_0_15px_rgba(196,165,255,0.3)] cursor-pointer" 
                 onClick={(e) => handleNavClick(e, 'resume')}
               >
                 Resume
@@ -133,9 +129,9 @@ const Navbar = () => {
 
 const Hero = () => {
   return (
-    <header className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-5 md:px-8 overflow-hidden">
+    <header className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-5 md:px-8 bg-black overflow-hidden">
       
-      {/* THE FIX: Pure CSS gradients instead of blurred divs so mobile doesn't wash out */}
+      {/* PURE CSS GRADIENTS FOR MOBILE COMPATIBILITY */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none" 
         style={{ 
@@ -188,7 +184,7 @@ const Hero = () => {
           <motion.a 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full sm:w-auto px-10 py-4 md:py-5 bg-surface-bright/20 backdrop-blur-md border border-outline-variant/15 text-primary font-bold text-base md:text-lg rounded-full hover:bg-surface-bright/40 transition-all duration-300 text-center cursor-pointer"
+            className="w-full sm:w-auto px-10 py-4 md:py-5 bg-white/5 backdrop-blur-md border border-white/10 text-primary font-bold text-base md:text-lg rounded-full hover:bg-white/10 transition-all duration-300 text-center cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               const el = document.getElementById('work');
@@ -202,16 +198,13 @@ const Hero = () => {
           </motion.a>
         </div>
       </motion.div>
-      
-      {/* Reduced opacity center gradient */}
-      <div className="absolute inset-0 z-0 opacity-10 md:opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #2b273c 0%, transparent 70%)' }}></div>
     </header>
   );
 };
 
 const About = () => {
   return (
-    <section className="py-24 md:py-40 px-5 md:px-8 bg-surface-container-low" id="about">
+    <section className="py-24 md:py-40 px-5 md:px-8 bg-black" id="about">
       <div className="max-w-5xl mx-auto text-center">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -220,7 +213,7 @@ const About = () => {
           className="relative inline-block mb-10 md:mb-12"
         >
           <div className="absolute -inset-4 bg-primary/5 blur-2xl rounded-full"></div>
-          <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter relative">
+          <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter relative text-white">
             <span className="italic font-light">Architectural</span> <br/>
             <span className="text-primary">Full-Stack Mindset</span>
           </h2>
@@ -261,10 +254,10 @@ const SkillCard = ({ skill }: SkillCardProps) => {
       whileHover={{ y: -8 }}
       className="group relative p-8 md:p-10 rounded-xl glass-panel border border-outline-variant/5 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(145,94,255,0.15)]"
     >
-      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface-container flex items-center justify-center mb-5 md:mb-6`}>
+      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-5 md:mb-6`}>
         <Icon />
       </div>
-      <h3 className="text-xl md:text-2xl font-bold mb-2">{skill.title}</h3>
+      <h3 className="text-xl md:text-2xl font-bold mb-2 text-white">{skill.title}</h3>
       <span className="inline-block px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[9px] md:text-[10px] font-black tracking-wider uppercase mb-4">
         {skill.category}
       </span>
@@ -277,11 +270,11 @@ const SkillCard = ({ skill }: SkillCardProps) => {
 
 const Skills = () => {
   return (
-    <section className="py-20 md:py-32 px-5 md:px-8" id="tech-stack">
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-black" id="tech-stack">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 md:mb-20">
           <span className="text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-secondary mb-3 md:mb-4 block italic">Engineered Skills</span>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Core Capabilities</h2>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white">Core Capabilities</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {SKILLS.map((skill, index) => (
@@ -328,15 +321,15 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
         
-        <div className={`lg:col-span-7 relative min-h-48 md:min-h-50 lg:min-h-75 overflow-hidden bg-[#0c0a18] ${!isEven ? 'lg:order-2' : ''}`}>
+        <div className={`lg:col-span-7 relative min-h-48 md:min-h-50 lg:min-h-75 overflow-hidden bg-black border-b lg:border-b-0 lg:border-r border-white/5 ${!isEven ? 'lg:order-2 lg:border-l lg:border-r-0' : ''}`}>
           <img 
             alt={project.title} 
             className="absolute inset-0 w-full h-full object-cover object-top-left transition-transform duration-1000 group-hover:scale-105" 
             src={project.image}
             referrerPolicy="no-referrer"
           />
-          <div className={`absolute inset-0 bg-gradient-to-${isEven ? 'r' : 'l'} from-background via-background/20 to-transparent hidden lg:block`}></div>
-          <div className="absolute inset-0 bg-linear-to-t from-[#0c0a18] via-transparent to-transparent lg:hidden"></div>
+          <div className={`absolute inset-0 bg-gradient-to-${isEven ? 'r' : 'l'} from-black via-black/20 to-transparent hidden lg:block`}></div>
+          <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent lg:hidden"></div>
         </div>
         
         <div className={`lg:col-span-5 p-6 md:p-8 flex flex-col justify-center relative z-10 ${!isEven ? 'lg:order-1' : ''}`}>
@@ -390,7 +383,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
 
 const Projects = () => {
   return (
-    <section className="py-20 md:py-32 px-5 md:px-8 bg-[#0c0a18]" id="work">
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-black" id="work">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 text-center">
           <h2 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-4 italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/40">
@@ -422,7 +415,6 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // --- SIMULATED SUBMISSION ---
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitStatus('success');
@@ -432,7 +424,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="py-20 md:py-32 px-5 md:px-8 bg-surface-container-low relative overflow-hidden" id="contact">
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-black relative overflow-hidden" id="contact">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         
         {/* LEFT COLUMN: Text & Info */}
@@ -457,7 +449,7 @@ const Contact = () => {
           <div className="flex flex-col gap-6 md:gap-8 mb-10 md:mb-12">
             {/* Email */}
             <div className="flex items-center gap-5 md:gap-6">
-              <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex shrink-0 items-center justify-center text-[#c4a5ff] shadow-inner">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex shrink-0 items-center justify-center text-[#c4a5ff] shadow-inner">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </div>
               <div className="overflow-hidden">
@@ -470,7 +462,7 @@ const Contact = () => {
 
             {/* Location */}
             <div className="flex items-center gap-5 md:gap-6">
-              <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex shrink-0 items-center justify-center text-[#c4a5ff] shadow-inner">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex shrink-0 items-center justify-center text-[#c4a5ff] shadow-inner">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
               </div>
               <div>
@@ -484,10 +476,10 @@ const Contact = () => {
 
           {/* Social Icons */}
           <div className="flex gap-4">
-            <a href="https://github.com/Mindflayer09" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#c4a5ff] hover:-translate-y-1 transition-all duration-300">
+            <a href="https://github.com/Mindflayer09" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#c4a5ff] hover:-translate-y-1 transition-all duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M 9 18c-4.51 2-5-2-7-2"/></svg>
             </a>
-            <a href="https://www.linkedin.com/in/sourabh-singh09" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#c4a5ff] hover:-translate-y-1 transition-all duration-300">
+            <a href="https://www.linkedin.com/in/sourabh-singh09" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#c4a5ff] hover:-translate-y-1 transition-all duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
             </a>
           </div>
@@ -500,7 +492,7 @@ const Contact = () => {
           viewport={{ once: true }}
           className="relative z-10"
         >
-          <div className="bg-black/40 p-6 md:p-10 rounded-[2rem] border border-white/5 shadow-2xl">
+          <div className="bg-white/3 p-6 md:p-10 rounded-[2rem] border border-white/10 shadow-2xl">
             <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6">
               
               <div className="group">
@@ -513,7 +505,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   placeholder="John Doe"
-                  className="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all shadow-inner text-sm md:text-base"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all shadow-inner text-sm md:text-base"
                 />
               </div>
 
@@ -527,7 +519,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   placeholder="john@example.com"
-                  className="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all shadow-inner text-sm md:text-base"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all shadow-inner text-sm md:text-base"
                 />
               </div>
 
@@ -541,14 +533,14 @@ const Contact = () => {
                   required
                   rows={4}
                   placeholder="How can I help you?"
-                  className="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all resize-none shadow-inner text-sm md:text-base"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all resize-none shadow-inner text-sm md:text-base"
                 />
               </div>
 
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full mt-2 bg-[#c4a5ff] text-[#0a081a] font-black text-base md:text-lg py-3 md:py-4 rounded-xl hover:bg-[#d6c1ff] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(196,165,255,0.3)] disabled:opacity-70 disabled:hover:translate-y-0"
+                className="w-full mt-2 bg-[#c4a5ff] text-black font-black text-base md:text-lg py-3 md:py-4 rounded-xl hover:bg-[#d6c1ff] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(196,165,255,0.3)] disabled:opacity-70 disabled:hover:translate-y-0"
               >
                 {isSubmitting ? 'Sending...' : 'Send Message'}
                 {!isSubmitting && (
@@ -576,14 +568,14 @@ const Contact = () => {
 // --- NEW COMPONENT: Embedded Resume Viewer ---
 const ResumeViewer = () => {
   return (
-    <section className="py-20 md:py-32 px-5 md:px-8 bg-[#0a081a] relative" id="resume">
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-black relative" id="resume">
       <div className="max-w-5xl mx-auto">
         <div className="mb-10 md:mb-16 text-center">
           <span className="text-secondary text-xs md:text-sm font-black tracking-[0.5em] uppercase mb-3 md:mb-4 block neon-overline">05 / QUALIFICATIONS</span>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white italic">MY <span className="text-primary font-light">RESUME.</span></h2>
         </div>
         
-        <div className="hidden md:block w-full h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-surface-container-low/50">
+        <div className="hidden md:block w-full h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-white/5">
           <iframe 
             src="/resume.pdf" 
             title="Sourabh Singh Resume"
@@ -597,7 +589,7 @@ const ResumeViewer = () => {
             href="/resume.pdf" 
             target="_blank"
             rel="noreferrer"
-            className="md:hidden flex items-center justify-center gap-2 px-8 py-4 bg-[#c4a5ff] text-[#0a081a] font-black text-sm tracking-widest uppercase rounded-full shadow-[0_0_15px_rgba(196,165,255,0.3)] hover:scale-105 transition-all"
+            className="md:hidden flex items-center justify-center gap-2 px-8 py-4 bg-[#c4a5ff] text-black font-black text-sm tracking-widest uppercase rounded-full shadow-[0_0_15px_rgba(196,165,255,0.3)] hover:scale-105 transition-all"
           >
             Open Resume
           </a>
@@ -617,7 +609,7 @@ const ResumeViewer = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-surface-container-lowest w-full py-8 md:py-12 px-6 md:px-12 border-t border-outline-variant/15">
+    <footer className="bg-black w-full py-8 md:py-12 px-6 md:px-12 border-t border-white/5">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-5 md:gap-6">
         <span className="font-sans text-[10px] md:text-xs tracking-widest uppercase text-slate-500 text-center md:text-left leading-relaxed">
           © 2026 Sourabh Singh. Built with Ethereal Precision.
@@ -668,9 +660,9 @@ export default function App() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white relative overflow-x-hidden font-sans">
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-0.5 bg-linear-to-r from-secondary to-tertiary z-60 origin-left"
+        className="fixed top-0 left-0 right-0 h-0.5 bg-[#c4a5ff] z-60 origin-left"
         style={{ scaleX }}
       />
       

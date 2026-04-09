@@ -5,9 +5,11 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   
-  --color-background: #141124;
+  /* PURE BLACK FIX: Changed base backgrounds from #141124 to pure black */
+  --color-background: #000000;
+  --color-surface: #000000;
+  
   --color-on-background: #e6dffb;
-  --color-surface: #141124;
   --color-on-surface: #e6dffb;
   --color-on-surface-variant: #ccc3d7;
   --color-surface-container-lowest: #0f0b1f;
@@ -48,14 +50,13 @@
 
 @layer base {
   body {
-    /* FIXED: Removed overflow-x-hidden from here */
     @apply bg-background text-on-background font-sans;
   }
 }
 
 @layer utilities {
   .glass-panel {
-    background: rgba(54, 50, 71, 0.4);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }
@@ -74,8 +75,9 @@
 
   .premium-card-border {
     position: relative;
-    background: rgba(20, 17, 36, 0.8);
-    border: 1px solid rgba(209, 188, 255, 0.1);
+    /* PURE BLACK FIX: Removed the purple tint from the card backgrounds */
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -93,9 +95,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-surface-container-highest rounded-full;
+  /* PURE BLACK FIX: Made the scrollbar thumb a sleek dark grey instead of purple */
+  background-color: #222;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-outline-variant;
+  background-color: #444;
 }
