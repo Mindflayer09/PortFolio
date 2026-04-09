@@ -112,9 +112,9 @@ const Navbar = () => {
 const Hero = () => {
   return (
     <header className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-5 md:px-8 overflow-hidden">
-      {/* Background Orbs */}
-      <div className="absolute top-1/4 -left-20 w-64 md:w-96 h-64 md:h-96 bg-primary/10 blur-[100px] md:blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-1/4 -right-20 w-64 md:w-96 h-64 md:h-96 bg-secondary/10 blur-[100px] md:blur-[120px] rounded-full"></div>
+      {/* Background Orbs: Reduced size, opacity, and blur on mobile */}
+      <div className="absolute top-1/4 -left-10 md:-left-20 w-48 md:w-96 h-48 md:h-96 bg-primary/10 opacity-30 md:opacity-100 blur-[80px] md:blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-1/4 -right-10 md:-right-20 w-48 md:w-96 h-48 md:h-96 bg-secondary/10 opacity-30 md:opacity-100 blur-[80px] md:blur-[120px] rounded-full"></div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -132,7 +132,6 @@ const Hero = () => {
             ]
           }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          // MOBILE FIX: Scaled text sizes for small screens
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter mb-6 md:mb-8 leading-tight flex flex-col md:flex-row flex-wrap items-center justify-center gap-2 md:gap-5"
         >
           <span className="font-black text-transparent bg-clip-text bg-linear-to-r from-[#68a063] via-[#61dafb] to-[#68a063] bg-size-[200%_auto] animate-gradient whitespace-nowrap">
@@ -146,12 +145,10 @@ const Hero = () => {
           </span>
         </motion.h1>
 
-        {/* MOBILE FIX: Smaller paragraph text on mobile */}
         <p className="text-lg md:text-2xl text-on-surface-variant max-w-3xl mx-auto font-light leading-relaxed mb-10 md:mb-12 px-2 md:px-4">
           I build responsive, high-performance web applications using the <span className="italic text-white">MERN STACK.</span>
         </p>
 
-        {/* MOBILE FIX: Buttons stack full-width on mobile, row on desktop */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 w-full sm:w-auto px-4 sm:px-0">
           <motion.a 
             whileHover={{ scale: 1.05 }}
@@ -172,14 +169,14 @@ const Hero = () => {
         </div>
       </motion.div>
       
-      <div className="absolute inset-0 z-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #2b273c 0%, transparent 70%)' }}></div>
+      {/* Lowered opacity of center radial gradient on mobile */}
+      <div className="absolute inset-0 z-0 opacity-5 md:opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #2b273c 0%, transparent 70%)' }}></div>
     </header>
   );
 };
 
 const About = () => {
   return (
-    // MOBILE FIX: py-24 px-5 on mobile, py-40 px-8 on desktop
     <section className="py-24 md:py-40 px-5 md:px-8 bg-surface-container-low" id="about">
       <div className="max-w-5xl mx-auto text-center">
         <motion.div 
@@ -189,7 +186,6 @@ const About = () => {
           className="relative inline-block mb-10 md:mb-12"
         >
           <div className="absolute -inset-4 bg-primary/5 blur-2xl rounded-full"></div>
-          {/* MOBILE FIX: text-4xl on mobile */}
           <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter relative">
             <span className="italic font-light">Architectural</span> <br/>
             <span className="text-primary">Full-Stack Mindset</span>
@@ -199,7 +195,6 @@ const About = () => {
         <div className="h-1 w-16 md:w-24 bg-linear-to-r from-primary to-secondary mb-10 md:mb-12 mx-auto"></div>
         
         <div className="space-y-10">
-          {/* MOBILE FIX: text-xl leading relaxed on mobile */}
           <p className="text-xl md:text-4xl text-on-surface font-light leading-normal md:leading-[1.3] tracking-tight">
             I am a Full-Stack Developer driven by a passion for building seamless digital experiences. Specializing in the <span className="text-glow-gradient font-bold italic">MERN STACK</span> (MongoDB, Express.js, React, Node.js), I engineer responsive, <span className="text-glow-gradient font-bold italic">user-centric applications</span> from the ground up. 
           </p>
@@ -248,7 +243,6 @@ const SkillCard = ({ skill }: SkillCardProps) => {
 
 const Skills = () => {
   return (
-    // MOBILE FIX: py-20 px-5
     <section className="py-20 md:py-32 px-5 md:px-8" id="tech-stack">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 md:mb-20">
@@ -300,7 +294,6 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
         
-        {/* MOBILE FIX: Adjusted min-height for project image on mobile */}
         <div className={`lg:col-span-7 relative min-h-48 md:min-h-50 lg:min-h-75 overflow-hidden bg-[#0c0a18] ${!isEven ? 'lg:order-2' : ''}`}>
           <img 
             alt={project.title} 
@@ -312,7 +305,6 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
           <div className="absolute inset-0 bg-linear-to-t from-[#0c0a18] via-transparent to-transparent lg:hidden"></div>
         </div>
         
-        {/* MOBILE FIX: Padding reduction on mobile */}
         <div className={`lg:col-span-5 p-6 md:p-8 flex flex-col justify-center relative z-10 ${!isEven ? 'lg:order-1' : ''}`}>
           
           <div className="flex items-center gap-3 mb-3">
@@ -334,7 +326,6 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
             ))}
           </div>
           
-          {/* MOBILE FIX: Buttons flex-wrap so they don't squash */}
           <div className="flex flex-wrap gap-3 md:gap-4">
             <motion.a 
               whileHover={{ scale: 1.05 }}
@@ -365,7 +356,6 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
 
 const Projects = () => {
   return (
-    // MOBILE FIX: py-20 px-5
     <section className="py-20 md:py-32 px-5 md:px-8 bg-[#0c0a18]" id="work">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 md:mb-24 text-center">
@@ -375,7 +365,6 @@ const Projects = () => {
           <div className="h-0.5 w-32 md:w-48 bg-linear-to-r from-transparent via-primary to-transparent mx-auto"></div>
         </div>
         
-        {/* MOBILE FIX: space-y-16 on mobile instead of massive space-y-40 */}
         <div className="space-y-16 md:space-y-32 lg:space-y-40">
           {PROJECTS.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
@@ -409,11 +398,9 @@ const Contact = () => {
   };
 
   return (
-    // MOBILE FIX: py-20 px-5
     <section className="py-20 md:py-32 px-5 md:px-8 bg-surface-container-low relative overflow-hidden" id="contact">
       <div className="absolute top-0 right-0 w-125 h-125 bg-primary/10 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
       
-      {/* MOBILE FIX: gap-12 on mobile */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         
         {/* LEFT COLUMN: Text & Info */}
@@ -427,7 +414,6 @@ const Contact = () => {
             04 / COLLABORATION
           </span>
           
-          {/* MOBILE FIX: text-5xl on mobile to prevent squishing */}
           <h2 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-6 md:mb-8 text-white italic leading-[0.9]">
             LET'S BUILD <br/>PROJECTS.
           </h2>
@@ -482,7 +468,6 @@ const Contact = () => {
           viewport={{ once: true }}
           className="relative z-10"
         >
-          {/* MOBILE FIX: p-6 on mobile, p-10 on desktop */}
           <div className="bg-black/40 p-6 md:p-10 rounded-[2rem] border border-white/5 shadow-2xl">
             <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6">
               
@@ -559,16 +544,13 @@ const Contact = () => {
 // --- NEW COMPONENT: Embedded Resume Viewer ---
 const ResumeViewer = () => {
   return (
-    // MOBILE FIX: py-20 px-5
     <section className="py-20 md:py-32 px-5 md:px-8 bg-[#0a081a] relative" id="resume">
       <div className="max-w-5xl mx-auto">
         <div className="mb-10 md:mb-16 text-center">
           <span className="text-secondary text-xs md:text-sm font-black tracking-[0.5em] uppercase mb-3 md:mb-4 block neon-overline">05 / QUALIFICATIONS</span>
-          {/* MOBILE FIX: text-4xl on mobile */}
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white italic">MY <span className="text-primary font-light">RESUME.</span></h2>
         </div>
         
-        {/* MOBILE FIX: adjusted height slightly on mobile to feel native */}
         <div className="w-full h-[65vh] md:h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-surface-container-low/50">
           <iframe 
             src="/resume.pdf" 
@@ -596,10 +578,8 @@ const ResumeViewer = () => {
 
 const Footer = () => {
   return (
-    // MOBILE FIX: py-8 px-6 on mobile
     <footer className="bg-surface-container-lowest w-full py-8 md:py-12 px-6 md:px-12 border-t border-outline-variant/15">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-5 md:gap-6">
-        {/* MOBILE FIX: text-[10px] to prevent awkward wrap on tiny screens */}
         <span className="font-sans text-[10px] md:text-xs tracking-widest uppercase text-slate-500 text-center md:text-left leading-relaxed">
           © 2026 Sourabh Singh. Built with Ethereal Precision.
         </span>
@@ -668,9 +648,9 @@ export default function App() {
       
       <Footer />
       
-      {/* Background Decoration */}
-      <div className="fixed top-0 right-0 -z-10 w-96 md:w-200 h-96 md:h-200 bg-primary/5 blur-[100px] md:blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-      <div className="fixed bottom-0 left-0 -z-10 w-72 md:w-150 h-72 md:h-150 bg-secondary/5 blur-[100px] md:blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+      {/* Background Decoration: Reduced opacity and blur on mobile so it doesn't fade the layout */}
+      <div className="fixed top-0 right-0 -z-10 w-64 md:w-200 h-64 md:h-200 bg-primary/5 opacity-20 md:opacity-100 blur-[80px] md:blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+      <div className="fixed bottom-0 left-0 -z-10 w-64 md:w-150 h-64 md:h-150 bg-secondary/5 opacity-20 md:opacity-100 blur-[80px] md:blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
     </div>
   );
 }
