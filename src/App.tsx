@@ -573,7 +573,8 @@ const ResumeViewer = () => {
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white italic">MY <span className="text-primary font-light">RESUME.</span></h2>
         </div>
         
-        <div className="w-full h-[65vh] md:h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-surface-container-low/50">
+        {/* MOBILE FIX: Added "hidden md:block" because mobile browsers cannot render PDF iframes inline */}
+        <div className="hidden md:block w-full h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-surface-container-low/50">
           <iframe 
             src="/resume.pdf" 
             title="Sourabh Singh Resume"
@@ -582,11 +583,22 @@ const ResumeViewer = () => {
           />
         </div>
 
-        <div className="mt-8 flex justify-center">
+        {/* Buttons: Added an "Open" button for mobile users, keeping the Download button for everyone */}
+        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+          {/* This button only shows on mobile to replace the hidden iframe */}
+          <a 
+            href="/resume.pdf" 
+            target="_blank"
+            rel="noreferrer"
+            className="md:hidden flex items-center justify-center gap-2 px-8 py-4 bg-[#c4a5ff] text-[#0a081a] font-black text-sm tracking-widest uppercase rounded-full shadow-[0_0_15px_rgba(196,165,255,0.3)] hover:scale-105 transition-all"
+          >
+            Open Resume
+          </a>
+          
           <a 
             href="/resume.pdf" 
             download="Resume.pdf"
-            className="flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-black text-sm tracking-widest uppercase rounded-full hover:bg-white/10 transition-all backdrop-blur-md"
+            className="flex items-center justify-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-black text-sm tracking-widest uppercase rounded-full hover:bg-white/10 transition-all backdrop-blur-md"
           >
             Download PDF
           </a>
