@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import { PROJECTS, SKILLS, SOCIALS } from './constants';
 import { 
   Terminal, 
@@ -22,57 +22,107 @@ import React from 'react';
 // --- Components ---
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsOpen(false); // Close menu if open
   };
 
+  const closeMenu = () => setIsOpen(false);
+
   return (
-    <nav className="fixed top-0 w-full z-50 bg-slate-950/40 backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(145,94,255,0.15)]">
-      <div className="flex justify-between items-center w-full px-8 py-4 max-w-full mx-auto">
+    <nav className="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(145,94,255,0.15)]">
+      <div className="flex justify-between items-center w-full px-5 md:px-8 py-4 max-w-full mx-auto relative z-50">
+        
+        {/* Logo */}
         <button 
           onClick={scrollToTop}
-          className="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-primary to-primary-container cursor-pointer hover:opacity-80 transition-opacity italic"
+          className="text-lg md:text-xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-primary to-primary-container cursor-pointer hover:opacity-80 transition-opacity italic"
         >
           Mern Stack Developer
         </button>
+        
+        {/* DESKTOP NAVIGATION (Hidden on Mobile) */}
         <div className="hidden md:flex items-center gap-8 font-sans tracking-tight text-sm uppercase font-semibold">
-          <a className="text-on-surface-variant hover:text-primary transition-colors" href="#about">About</a>
-          <a className="text-on-surface-variant hover:text-primary transition-colors" href="#tech-stack">Tech Stack</a>
-          <a className="text-on-surface-variant hover:text-primary transition-colors" href="#work">Work</a>
-          <a className="text-on-surface-variant hover:text-primary transition-colors" href="#contact">Contact</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#about">About</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#tech-stack">Tech Stack</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#work">Work</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#contact">Contact</a>
           
-          {/* UPDATED: Now scrolls to the #resume section instead of downloading directly */}
           <a 
-            className="px-6 py-2 bg-white/5 rounded-full text-primary hover:bg-white/10 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] scale-95 active:opacity-80" 
+            className="px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[#c4a5ff] hover:bg-white/10 hover:border-[#c4a5ff]/30 transition-all duration-300" 
             href="#resume"
           >
             Resume
           </a>
         </div>
+
+        {/* Action Icons & Mobile Menu Button */}
         <div className="flex items-center gap-4 text-on-surface-variant">
-          <Terminal className="cursor-pointer hover:text-primary" />
-          <Code className="cursor-pointer hover:text-primary" />
+          {/* Hide Terminal/Code icons on extremely small phones so it doesn't overlap */}
+          <div className="hidden sm:flex items-center gap-4">
+            <Terminal className="cursor-pointer hover:text-[#c4a5ff] w-5 h-5 md:w-6 md:h-6 transition-colors" />
+            <Code className="cursor-pointer hover:text-[#c4a5ff] w-5 h-5 md:w-6 md:h-6 transition-colors" />
+          </div>
+
+          {/* MOBILE HAMBURGER BUTTON */}
+          <button 
+            className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Menu"
+          >
+            <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${isOpen ? 'rotate-45 translate-y-1.5' : '-translate-y-1'}`}></span>
+            <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${isOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+            <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${isOpen ? '-rotate-45 -translate-y-1.5' : 'translate-y-1'}`}></span>
+          </button>
         </div>
       </div>
+
+      {/* MOBILE DROPDOWN MENU */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden absolute top-full left-0 w-full bg-[#0a081a]/95 backdrop-blur-xl border-b border-white/10 overflow-hidden shadow-2xl"
+          >
+            <div className="flex flex-col items-center py-8 gap-6 font-sans tracking-widest text-xs uppercase font-bold">
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#about" onClick={closeMenu}>About</a>
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#tech-stack" onClick={closeMenu}>Tech Stack</a>
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#work" onClick={closeMenu}>Work</a>
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#contact" onClick={closeMenu}>Contact</a>
+              
+              <a 
+                className="mt-4 px-8 py-3 bg-[#c4a5ff] text-[#0a081a] font-black rounded-full hover:bg-[#d6c1ff] transition-all shadow-[0_0_15px_rgba(196,165,255,0.3)]" 
+                href="#resume"
+                onClick={closeMenu}
+              >
+                Resume
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
 const Hero = () => {
   return (
-    <header className="relative h-screen flex items-center justify-center pt-20 px-4 md:px-8 overflow-hidden">
+    <header className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-5 md:px-8 overflow-hidden">
       {/* Background Orbs */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/10 blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-secondary/10 blur-[120px] rounded-full"></div>
+      <div className="absolute top-1/4 -left-20 w-64 md:w-96 h-64 md:h-96 bg-primary/10 blur-[100px] md:blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-1/4 -right-20 w-64 md:w-96 h-64 md:h-96 bg-secondary/10 blur-[100px] md:blur-[120px] rounded-full"></div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="w-full max-w-5xl mx-auto text-center relative z-10 flex flex-col items-center"
+        className="w-full max-w-5xl mx-auto text-center relative z-10 flex flex-col items-center mt-10 md:mt-0"
       >
         
-        {/* NEW AESTHETIC HEADER */}
         <motion.h1 
           animate={{
             filter: [
@@ -82,31 +132,31 @@ const Hero = () => {
             ]
           }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl tracking-tighter mb-8 leading-tight flex flex-wrap items-center justify-center gap-3 md:gap-5"
+          // MOBILE FIX: Scaled text sizes for small screens
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter mb-6 md:mb-8 leading-tight flex flex-col md:flex-row flex-wrap items-center justify-center gap-2 md:gap-5"
         >
-          {/* 1. The Name (Bold, Animated MERN Gradient: Mongo Green to React Blue) */}
-          <span className="font-black text-transparent bg-clip-text bg-linear-to-r from-[#68a063] via-[#61dafb] to-[#68a063] bg-[length:200%_auto] animate-gradient whitespace-nowrap">
+          <span className="font-black text-transparent bg-clip-text bg-linear-to-r from-[#68a063] via-[#61dafb] to-[#68a063] bg-size-[200%_auto] animate-gradient whitespace-nowrap">
             SOURABH SINGH
           </span>
           
-          {/* 2. The Thicker Anchor Bar (Hidden on mobile to allow clean wrapping) */}
-          <span className="w-[3px] md:w-[5px] h-8 md:h-12 bg-white rounded-full opacity-90 shadow-[0_0_10px_rgba(255,255,255,0.5)] hidden md:block"></span>
+          <span className="w-1.25 h-12 bg-white rounded-full opacity-90 shadow-[0_0_10px_rgba(255,255,255,0.5)] hidden md:block"></span>
           
-          {/* 3. The Title (Lighter weight, matching your purple primary theme) */}
-          <span className="font-medium text-primary whitespace-nowrap">
+          <span className="font-medium text-primary whitespace-nowrap text-3xl sm:text-4xl md:text-6xl lg:text-7xl">
             FULL STACK DEVELOPER.
           </span>
         </motion.h1>
 
-        <p className="text-xl md:text-2xl text-on-surface-variant max-w-3xl mx-auto font-light leading-relaxed mb-12 px-4">
+        {/* MOBILE FIX: Smaller paragraph text on mobile */}
+        <p className="text-lg md:text-2xl text-on-surface-variant max-w-3xl mx-auto font-light leading-relaxed mb-10 md:mb-12 px-2 md:px-4">
           I build responsive, high-performance web applications using the <span className="italic text-white">MERN STACK.</span>
         </p>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+        {/* MOBILE FIX: Buttons stack full-width on mobile, row on desktop */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 w-full sm:w-auto px-4 sm:px-0">
           <motion.a 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-10 py-5 bg-linear-to-r from-primary to-primary-container text-on-primary font-bold text-lg rounded-full shadow-[0_0_30px_rgba(161,120,255,0.3)]"
+            className="w-full sm:w-auto px-10 py-4 md:py-5 bg-linear-to-r from-primary to-primary-container text-on-primary font-bold text-base md:text-lg rounded-full shadow-[0_0_30px_rgba(161,120,255,0.3)] text-center"
             href="mailto:singhsourav090305@gmail.com?subject=Opportunity%20via%20Portfolio&body=Hi%20Sourabh,%0A%0AI%20was%20looking%20at%20your%20portfolio%20and%20wanted%20to%20connect%20regarding..."
           >
             Contact Me
@@ -114,7 +164,7 @@ const Hero = () => {
           <motion.a 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-10 py-5 bg-surface-bright/20 backdrop-blur-md border border-outline-variant/15 text-primary font-bold text-lg rounded-full hover:bg-surface-bright/40 transition-all duration-300"
+            className="w-full sm:w-auto px-10 py-4 md:py-5 bg-surface-bright/20 backdrop-blur-md border border-outline-variant/15 text-primary font-bold text-base md:text-lg rounded-full hover:bg-surface-bright/40 transition-all duration-300 text-center"
             href="#work"
           >
             View My Work
@@ -129,25 +179,28 @@ const Hero = () => {
 
 const About = () => {
   return (
-    <section className="py-40 px-8 bg-surface-container-low" id="about">
+    // MOBILE FIX: py-24 px-5 on mobile, py-40 px-8 on desktop
+    <section className="py-24 md:py-40 px-5 md:px-8 bg-surface-container-low" id="about">
       <div className="max-w-5xl mx-auto text-center">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative inline-block mb-12"
+          className="relative inline-block mb-10 md:mb-12"
         >
           <div className="absolute -inset-4 bg-primary/5 blur-2xl rounded-full"></div>
-          <h2 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter relative">
+          {/* MOBILE FIX: text-4xl on mobile */}
+          <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter relative">
             <span className="italic font-light">Architectural</span> <br/>
             <span className="text-primary">Full-Stack Mindset</span>
           </h2>
         </motion.div>
         
-        <div className="h-1 w-24 bg-linear-to-r from-primary to-secondary mb-12 mx-auto"></div>
+        <div className="h-1 w-16 md:w-24 bg-linear-to-r from-primary to-secondary mb-10 md:mb-12 mx-auto"></div>
         
         <div className="space-y-10">
-          <p className="text-2xl md:text-4xl text-on-surface font-light leading-[1.3] tracking-tight">
+          {/* MOBILE FIX: text-xl leading relaxed on mobile */}
+          <p className="text-xl md:text-4xl text-on-surface font-light leading-normal md:leading-[1.3] tracking-tight">
             I am a Full-Stack Developer driven by a passion for building seamless digital experiences. Specializing in the <span className="text-glow-gradient font-bold italic">MERN STACK</span> (MongoDB, Express.js, React, Node.js), I engineer responsive, <span className="text-glow-gradient font-bold italic">user-centric applications</span> from the ground up. 
           </p>
         </div>
@@ -164,44 +217,45 @@ interface SkillCardProps {
 const SkillCard = ({ skill }: SkillCardProps) => {
   const Icon = () => {
     switch(skill.icon) {
-      case 'javascript': return <Javascript className={`text-${skill.color} text-3xl`} />;
-      case 'deployed_code': return <DeployedCode className={`text-${skill.color} text-3xl`} />;
-      case 'palette': return <Palette className={`text-${skill.color} text-3xl`} />;
-      case 'terminal': return <Terminal className={`text-${skill.color} text-3xl`} />;
-      case 'database': return <Database className={`text-${skill.color} text-3xl`} />;
-      case 'cloud_queue': return <CloudQueue className={`text-${skill.color} text-3xl`} />;
+      case 'javascript': return <Javascript className={`text-${skill.color} text-2xl md:text-3xl`} />;
+      case 'deployed_code': return <DeployedCode className={`text-${skill.color} text-2xl md:text-3xl`} />;
+      case 'palette': return <Palette className={`text-${skill.color} text-2xl md:text-3xl`} />;
+      case 'terminal': return <Terminal className={`text-${skill.color} text-2xl md:text-3xl`} />;
+      case 'database': return <Database className={`text-${skill.color} text-2xl md:text-3xl`} />;
+      case 'cloud_queue': return <CloudQueue className={`text-${skill.color} text-2xl md:text-3xl`} />;
       default: return null;
     }
   };
 
   return (
     <motion.div 
-      whileHover={{ y: -12 }}
-      className="group relative p-10 rounded-xl glass-panel border border-outline-variant/5 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(145,94,255,0.15)]"
+      whileHover={{ y: -8 }}
+      className="group relative p-8 md:p-10 rounded-xl glass-panel border border-outline-variant/5 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(145,94,255,0.15)]"
     >
-      <div className={`w-14 h-14 rounded-full bg-surface-container flex items-center justify-center mb-6`}>
+      <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-surface-container flex items-center justify-center mb-5 md:mb-6`}>
         <Icon />
       </div>
-      <h3 className="text-2xl font-bold mb-2">{skill.title}</h3>
-      <span className="inline-block px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-black tracking-wider uppercase mb-4">
+      <h3 className="text-xl md:text-2xl font-bold mb-2">{skill.title}</h3>
+      <span className="inline-block px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[9px] md:text-[10px] font-black tracking-wider uppercase mb-4">
         {skill.category}
       </span>
-      <p className="text-on-surface-variant text-sm leading-relaxed">{skill.description}</p>
+      <p className="text-on-surface-variant text-sm md:text-base leading-relaxed">{skill.description}</p>
       
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
     </motion.div>
   );
 };
 
 const Skills = () => {
   return (
-    <section className="py-32 px-8" id="tech-stack">
+    // MOBILE FIX: py-20 px-5
+    <section className="py-20 md:py-32 px-5 md:px-8" id="tech-stack">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
-          <span className="text-xs font-bold tracking-[0.3em] uppercase text-secondary mb-4 block italic">Engineered Skills</span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter">Core Capabilities</h2>
+        <div className="mb-12 md:mb-20">
+          <span className="text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-secondary mb-3 md:mb-4 block italic">Engineered Skills</span>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tighter">Core Capabilities</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {SKILLS.map((skill, index) => (
             <SkillCard key={index} skill={skill} />
           ))}
@@ -239,85 +293,90 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group relative premium-card-border rounded-[2rem] overflow-hidden"
+      className="group relative premium-card-border rounded-3xl md:rounded-[2rem] overflow-hidden"
       style={{ '--angle': `${angle}deg` } as any}
     >
       <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
         
-        <div className={`lg:col-span-7 relative min-h-[200px] lg:min-h-[300px] overflow-hidden bg-[#0c0a18] ${!isEven ? 'lg:order-2' : ''}`}>
+        {/* MOBILE FIX: Adjusted min-height for project image on mobile */}
+        <div className={`lg:col-span-7 relative min-h-48 md:min-h-50 lg:min-h-75 overflow-hidden bg-[#0c0a18] ${!isEven ? 'lg:order-2' : ''}`}>
           <img 
             alt={project.title} 
-            className="absolute inset-0 w-full h-full object-cover object-left-top transition-transform duration-1000 group-hover:scale-105" 
+            className="absolute inset-0 w-full h-full object-cover object-top-left transition-transform duration-1000 group-hover:scale-105" 
             src={project.image}
             referrerPolicy="no-referrer"
           />
           <div className={`absolute inset-0 bg-gradient-to-${isEven ? 'r' : 'l'} from-background via-background/20 to-transparent hidden lg:block`}></div>
-          <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent lg:hidden"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-[#0c0a18] via-transparent to-transparent lg:hidden"></div>
         </div>
         
+        {/* MOBILE FIX: Padding reduction on mobile */}
         <div className={`lg:col-span-5 p-6 md:p-8 flex flex-col justify-center relative z-10 ${!isEven ? 'lg:order-1' : ''}`}>
           
           <div className="flex items-center gap-3 mb-3">
-            <span className={`w-8 h-[1px] bg-${project.color}`}></span>
-            <span className={`text-${project.color} text-[10px] font-black tracking-[0.3em] uppercase italic`}>{project.category}</span>
+            <span className={`w-6 md:w-8 h-px bg-${project.color}`}></span>
+            <span className={`text-${project.color} text-[9px] md:text-[10px] font-black tracking-[0.3em] uppercase italic`}>{project.category}</span>
           </div>
           
-          <h3 className="text-3xl md:text-4xl font-black mb-4 tracking-tighter text-white">{project.title}</h3>
+          <h3 className="text-2xl md:text-3xl lg:text-4xl font-black mb-3 md:mb-4 tracking-tighter text-white">{project.title}</h3>
           
-          <p className="text-on-surface-variant mb-6 text-base md:text-lg leading-relaxed font-light">
+          <p className="text-on-surface-variant mb-6 text-sm md:text-base lg:text-lg leading-relaxed font-light">
             {project.description}
           </p>
           
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
             {project.tags.map(tag => (
-              <span key={tag} className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-widest text-primary uppercase backdrop-blur-md">
+              <span key={tag} className="px-3 py-1 md:py-1.5 rounded-full bg-white/5 border border-white/10 text-[9px] md:text-[10px] font-bold tracking-widest text-primary uppercase backdrop-blur-md">
                 {tag}
               </span>
             ))}
           </div>
           
-          <div className="flex flex-wrap gap-4">
+          {/* MOBILE FIX: Buttons flex-wrap so they don't squash */}
+          <div className="flex flex-wrap gap-3 md:gap-4">
             <motion.a 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`flex items-center gap-2 px-6 py-3 bg-${project.color} text-on-background font-black text-xs tracking-widest uppercase rounded-full overflow-hidden shadow-[0_5px_20px_rgba(209,188,255,0.2)]`}
+              className={`flex items-center justify-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-${project.color} text-on-background font-black text-[10px] md:text-xs tracking-widest uppercase rounded-full overflow-hidden shadow-[0_5px_20px_rgba(209,188,255,0.2)] flex-1 sm:flex-none`}
               href={project.liveUrl}
             >
               <span className="relative z-10">Live Site</span>
-              <ArrowOutward className="relative z-10 text-base" />
+              <ArrowOutward className="relative z-10 text-sm md:text-base" />
             </motion.a>
             <motion.a 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 px-6 py-3 border border-outline-variant/30 text-white font-black text-xs tracking-widest uppercase rounded-full hover:bg-white/5 transition-all"
+              className="flex items-center justify-center gap-2 px-5 md:px-6 py-2.5 md:py-3 border border-outline-variant/30 text-white font-black text-[10px] md:text-xs tracking-widest uppercase rounded-full hover:bg-white/5 transition-all flex-1 sm:flex-none"
               href={project.githubUrl}
             >
               <span>GitHub</span>
-              <Code className="text-base opacity-50" />
+              <Code className="text-sm md:text-base opacity-50" />
             </motion.a>
           </div>
         </div>
       </div>
       
-      <div className="absolute inset-[-1px] bg-[conic-gradient(from_var(--angle),transparent,var(--color-primary),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 rounded-[2rem]"></div>
+      <div className="absolute -inset-px bg-[conic-gradient(from_var(--angle),transparent,var(--color-primary),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 rounded-[2rem]"></div>
     </motion.div>
   );
 };
 
 const Projects = () => {
   return (
-    <section className="py-32 px-4 md:px-0 bg-[#0c0a18]" id="work">
-      <div className="max-w-[1400px] mx-auto">
-        <div className="mb-24 text-center">
-          <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-4 italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/40">
+    // MOBILE FIX: py-20 px-5
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-[#0c0a18]" id="work">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-16 md:mb-24 text-center">
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-4 italic text-transparent bg-clip-text bg-linear-to-b from-white to-white/40">
             Featured <span className="font-light">Deployments</span>
           </h2>
-          <div className="h-[2px] w-48 bg-linear-to-r from-transparent via-primary to-transparent mx-auto"></div>
+          <div className="h-0.5 w-32 md:w-48 bg-linear-to-r from-transparent via-primary to-transparent mx-auto"></div>
         </div>
         
-        <div className="space-y-40">
+        {/* MOBILE FIX: space-y-16 on mobile instead of massive space-y-40 */}
+        <div className="space-y-16 md:space-y-32 lg:space-y-40">
           {PROJECTS.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
@@ -328,43 +387,170 @@ const Projects = () => {
 };
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // --- SIMULATED SUBMISSION ---
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setSubmitStatus('idle'), 4000);
+    }, 1500);
+  };
+
   return (
-    <section className="py-32 px-8 bg-[#0a081a] relative overflow-hidden" id="contact">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
+    // MOBILE FIX: py-20 px-5
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-surface-container-low relative overflow-hidden" id="contact">
+      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/10 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
       
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
+      {/* MOBILE FIX: gap-12 on mobile */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        
+        {/* LEFT COLUMN: Text & Info */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col justify-center"
+          className="flex flex-col justify-center relative z-10"
         >
-          <span className="text-secondary text-sm font-black tracking-[0.5em] uppercase mb-6 neon-overline">04 / COLLABORATION</span>
-          <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 text-white italic">START A <br/>PROJECT.</h2>
-          <p className="text-xl text-slate-300 mb-10 leading-relaxed max-w-lg">
+          <span className="text-[#c4a5ff] text-xs md:text-sm font-black tracking-[0.5em] uppercase mb-4 md:mb-6 drop-shadow-[0_0_8px_rgba(196,165,255,0.5)]">
+            04 / COLLABORATION
+          </span>
+          
+          {/* MOBILE FIX: text-5xl on mobile to prevent squishing */}
+          <h2 className="text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-6 md:mb-8 text-white italic leading-[0.9]">
+            LET'S BUILD <br/>PROJECTS.
+          </h2>
+          
+          <p className="text-lg md:text-xl text-slate-300 mb-10 md:mb-12 leading-relaxed max-w-lg">
             I am currently available for freelance opportunities and full-time engineering roles. Let's build something technically superior.
           </p>
-          <a className="text-xl md:text-2xl lg:text-3xl font-bold text-white hover:text-secondary transition-colors break-all leading-tight" href="mailto:singhsourav090305@gmail.com">
-            singhsourav090305@gmail.com
-          </a>
+          
+          <div className="flex flex-col gap-6 md:gap-8 mb-10 md:mb-12">
+            {/* Email */}
+            <div className="flex items-center gap-5 md:gap-6">
+              <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex shrink-0 items-center justify-center text-[#c4a5ff] shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div className="overflow-hidden">
+                <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase mb-1">Email</p>
+                <a className="text-base md:text-lg font-bold text-white hover:text-[#c4a5ff] transition-colors break-all md:break-normal" href="mailto:singhsourav090305@gmail.com">
+                  singhsourav090305@gmail.com
+                </a>
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="flex items-center gap-5 md:gap-6">
+              <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex shrink-0 items-center justify-center text-[#c4a5ff] shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase mb-1">Location</p>
+                <p className="text-base md:text-lg font-bold text-white">
+                  New Delhi, India
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Icons */}
+          <div className="flex gap-4">
+            <a href="https://github.com/Mindflayer09" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#c4a5ff] hover:-translate-y-1 transition-all duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M 9 18c-4.51 2-5-2-7-2"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/sourabh-singh09" target="_blank" rel="noreferrer" className="w-12 h-12 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#c4a5ff] hover:-translate-y-1 transition-all duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
         </motion.div>
         
+        {/* RIGHT COLUMN: Contact Form */}
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col justify-center lg:pl-20"
+          className="relative z-10"
         >
-          <span className="text-secondary text-sm font-black tracking-[0.5em] uppercase mb-10 neon-overline">SOCIAL CONNECT</span>
-          <div className="flex flex-col gap-8">
-            {SOCIALS.map(social => (
-              <a key={social.name} className="group flex justify-between items-center py-6 border-b border-slate-800 hover:border-secondary transition-all" href={social.url} target="_blank" rel="noreferrer">
-                <span className="text-2xl font-black tracking-widest text-slate-400 group-hover:text-white group-hover:translate-x-4 transition-all duration-300">{social.name}</span>
-                <NorthEast className="text-secondary text-3xl opacity-0 group-hover:opacity-100 group-hover:rotate-45 transition-all duration-300" />
-              </a>
-            ))}
+          {/* MOBILE FIX: p-6 on mobile, p-10 on desktop */}
+          <div className="bg-black/40 p-6 md:p-10 rounded-[2rem] border border-white/5 shadow-2xl">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6">
+              
+              <div className="group">
+                <label htmlFor="name" className="block text-[10px] font-black tracking-widest text-[#c4a5ff] mb-2 uppercase opacity-80 group-focus-within:opacity-100 transition-opacity">Name</label>
+                <input 
+                  type="text" 
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="John Doe"
+                  className="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all shadow-inner text-sm md:text-base"
+                />
+              </div>
+
+              <div className="group">
+                <label htmlFor="email" className="block text-[10px] font-black tracking-widest text-[#c4a5ff] mb-2 uppercase opacity-80 group-focus-within:opacity-100 transition-opacity">Email</label>
+                <input 
+                  type="email" 
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="john@example.com"
+                  className="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all shadow-inner text-sm md:text-base"
+                />
+              </div>
+
+              <div className="group">
+                <label htmlFor="message" className="block text-[10px] font-black tracking-widest text-[#c4a5ff] mb-2 uppercase opacity-80 group-focus-within:opacity-100 transition-opacity">Message</label>
+                <textarea 
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={4}
+                  placeholder="How can I help you?"
+                  className="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 md:py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#c4a5ff]/50 focus:ring-1 focus:ring-[#c4a5ff]/50 transition-all resize-none shadow-inner text-sm md:text-base"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="w-full mt-2 bg-[#c4a5ff] text-[#0a081a] font-black text-base md:text-lg py-3 md:py-4 rounded-xl hover:bg-[#d6c1ff] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(196,165,255,0.3)] disabled:opacity-70 disabled:hover:translate-y-0"
+              >
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+                {!isSubmitting && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                )}
+              </button>
+
+              {/* Status Messages */}
+              {submitStatus === 'success' && (
+                <p className="text-green-400 text-xs md:text-sm font-medium text-center mt-2">Message sent successfully! I'll get back to you soon.</p>
+              )}
+              {submitStatus === 'error' && (
+                <p className="text-red-400 text-xs md:text-sm font-medium text-center mt-2">Something went wrong. Please try again later.</p>
+              )}
+
+            </form>
           </div>
         </motion.div>
+
       </div>
     </section>
   );
@@ -373,24 +559,25 @@ const Contact = () => {
 // --- NEW COMPONENT: Embedded Resume Viewer ---
 const ResumeViewer = () => {
   return (
-    <section className="py-32 px-4 md:px-8 bg-[#0a081a] relative" id="resume">
+    // MOBILE FIX: py-20 px-5
+    <section className="py-20 md:py-32 px-5 md:px-8 bg-[#0a081a] relative" id="resume">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-16 text-center">
-          <span className="text-secondary text-sm font-black tracking-[0.5em] uppercase mb-4 block neon-overline">05 / QUALIFICATIONS</span>
-          <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white italic">MY <span className="text-primary font-light">RESUME.</span></h2>
+        <div className="mb-10 md:mb-16 text-center">
+          <span className="text-secondary text-xs md:text-sm font-black tracking-[0.5em] uppercase mb-3 md:mb-4 block neon-overline">05 / QUALIFICATIONS</span>
+          {/* MOBILE FIX: text-4xl on mobile */}
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white italic">MY <span className="text-primary font-light">RESUME.</span></h2>
         </div>
         
-        {/* The Embedded Viewer */}
-        <div className="w-full h-[80vh] min-h-[800px] rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-2 bg-surface-container-low/50">
+        {/* MOBILE FIX: adjusted height slightly on mobile to feel native */}
+        <div className="w-full h-[65vh] md:h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-surface-container-low/50">
           <iframe 
             src="/resume.pdf" 
             title="Sourabh Singh Resume"
-            className="w-full h-full rounded-[1.5rem] bg-white"
+            className="w-full h-full rounded-xl md:rounded-3xl bg-white"
             style={{ border: 'none' }}
           />
         </div>
 
-        {/* Fallback Download Button (Crucial for mobile users) */}
         <div className="mt-8 flex justify-center">
           <a 
             href="/resume.pdf" 
@@ -402,21 +589,50 @@ const ResumeViewer = () => {
         </div>
       </div>
       
-      {/* Background Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 blur-[150px] rounded-full -z-10"></div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 md:w-150 h-72 md:h-150 bg-primary/5 blur-[100px] md:blur-[150px] rounded-full -z-10"></div>
     </section>
   );
 };
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0f0b1f] w-full py-12 px-12 border-t border-outline-variant/15">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        <span className="font-sans text-xs tracking-widest uppercase text-slate-500">© 2026 Sourabh Singh. Built with Ethereal Precision.</span>
-        <div className="flex gap-8 font-sans text-xs tracking-widest uppercase text-slate-500">
-          <a className="hover:text-tertiary transition-colors" href="https://github.com/Mindflayer09">GitHub</a>
-          <a className="hover:text-tertiary transition-colors" href="https://www.linkedin.com/in/sourabh-singh09">LinkedIn</a>
+    // MOBILE FIX: py-8 px-6 on mobile
+    <footer className="bg-surface-container-lowest w-full py-8 md:py-12 px-6 md:px-12 border-t border-outline-variant/15">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-5 md:gap-6">
+        {/* MOBILE FIX: text-[10px] to prevent awkward wrap on tiny screens */}
+        <span className="font-sans text-[10px] md:text-xs tracking-widest uppercase text-slate-500 text-center md:text-left leading-relaxed">
+          © 2026 Sourabh Singh. Built with Ethereal Precision.
+        </span>
+        
+        <div className="flex gap-6 items-center text-slate-500">
+          <a 
+            className="hover:text-[#c4a5ff] hover:-translate-y-1 transition-all duration-300 p-2 md:p-0" 
+            href="https://github.com/Mindflayer09" 
+            target="_blank" 
+            rel="noreferrer"
+            aria-label="GitHub"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/>
+              <path d="M 9 18c-4.51 2-5-2-7-2"/>
+            </svg>
+          </a>
+          
+          <a 
+            className="hover:text-[#c4a5ff] hover:-translate-y-1 transition-all duration-300 p-2 md:p-0" 
+            href="https://www.linkedin.com/in/sourabh-singh09" 
+            target="_blank" 
+            rel="noreferrer"
+            aria-label="LinkedIn"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect width="4" height="12" x="2" y="9"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
         </div>
+        
       </div>
     </footer>
   );
@@ -433,9 +649,9 @@ export default function App() {
   });
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative overflow-x-hidden">
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-[2px] bg-linear-to-r from-secondary to-tertiary z-[60] origin-left"
+        className="fixed top-0 left-0 right-0 h-0.5 bg-linear-to-r from-secondary to-tertiary z-60 origin-left"
         style={{ scaleX }}
       />
       
@@ -447,16 +663,14 @@ export default function App() {
         <Skills />
         <Projects />
         <Contact />
-        
-        {/* INJECTED RIGHT HERE! */}
         <ResumeViewer />
       </main>
       
       <Footer />
       
       {/* Background Decoration */}
-      <div className="fixed top-0 right-0 -z-10 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-      <div className="fixed bottom-0 left-0 -z-10 w-[600px] h-[600px] bg-secondary/5 blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+      <div className="fixed top-0 right-0 -z-10 w-96 md:w-200 h-96 md:h-200 bg-primary/5 blur-[100px] md:blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+      <div className="fixed bottom-0 left-0 -z-10 w-72 md:w-150 h-72 md:h-150 bg-secondary/5 blur-[100px] md:blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
     </div>
   );
 }

@@ -61,6 +61,7 @@
 
   .text-glow-gradient {
     background: linear-gradient(90deg, #d1bcff, #5de6ff);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 10px rgba(209, 188, 255, 0.3));
