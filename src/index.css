@@ -36,11 +36,11 @@
   --radius-lg: 2rem;
   --radius-xl: 3rem;
 
-  /* NEW: The shifting gradient animation for your name */
+  /* The shifting gradient animation for your name */
   --animate-gradient: gradient 4s linear infinite;
 }
 
-/* NEW: The keyframes that move the background colors */
+/* The keyframes that move the background colors */
 @keyframes gradient {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -48,7 +48,8 @@
 
 @layer base {
   body {
-    @apply bg-background text-on-background font-sans overflow-x-hidden;
+    /* FIXED: Removed overflow-x-hidden from here */
+    @apply bg-background text-on-background font-sans;
   }
 }
 

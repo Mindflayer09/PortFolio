@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import { PROJECTS, SKILLS, SOCIALS } from './constants';
 import { 
@@ -16,43 +16,66 @@ import {
   Database, 
   CloudQueue
 } from './components/Icons';
-import { useRef, useState } from 'react';
-import React from 'react';
 
 // --- Components ---
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const scrollToTop = () => {
+  const scrollToTop = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setIsOpen(false); // Close menu if open
+    setIsOpen(false);
   };
 
   const closeMenu = () => setIsOpen(false);
+
+  // THE MAGIC FIX: A custom scroll handler with a tiny delay
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault(); // Stop the browser's default jumping behavior
+    setIsOpen(false); // Close the mobile menu immediately
+
+    // Wait 150ms for the menu to finish closing and the DOM to settle
+    setTimeout(() => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        const navbarHeight = 80; // The height of your glass navbar
+        // Calculate exact position relative to the document
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - navbarHeight;
+
+        // Force the window to scroll
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 150); 
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-slate-950/60 backdrop-blur-3xl shadow-[0_8px_32px_0_rgba(145,94,255,0.15)]">
       <div className="flex justify-between items-center w-full px-5 md:px-8 py-4 max-w-full mx-auto relative z-50">
         
         {/* Logo */}
-        <button 
+        <a 
+          href="#"
           onClick={scrollToTop}
           className="text-lg md:text-xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-primary to-primary-container cursor-pointer hover:opacity-80 transition-opacity italic"
         >
           Mern Stack Developer
-        </button>
+        </a>
         
-        {/* DESKTOP NAVIGATION (Hidden on Mobile) */}
+        {/* DESKTOP NAVIGATION */}
         <div className="hidden md:flex items-center gap-8 font-sans tracking-tight text-sm uppercase font-semibold">
-          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#about">About</a>
-          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#tech-stack">Tech Stack</a>
-          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#work">Work</a>
-          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors" href="#contact">Contact</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'about')}>About</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'tech-stack')}>Tech Stack</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'work')}>Work</a>
+          <a className="text-on-surface-variant hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'contact')}>Contact</a>
           
           <a 
-            className="px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[#c4a5ff] hover:bg-white/10 hover:border-[#c4a5ff]/30 transition-all duration-300" 
-            href="#resume"
+            className="px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[#c4a5ff] hover:bg-white/10 hover:border-[#c4a5ff]/30 transition-all duration-300 cursor-pointer" 
+            onClick={(e) => handleNavClick(e, 'resume')}
           >
             Resume
           </a>
@@ -60,7 +83,6 @@ const Navbar = () => {
 
         {/* Action Icons & Mobile Menu Button */}
         <div className="flex items-center gap-4 text-on-surface-variant">
-          {/* Hide Terminal/Code icons on extremely small phones so it doesn't overlap */}
           <div className="hidden sm:flex items-center gap-4">
             <Terminal className="cursor-pointer hover:text-[#c4a5ff] w-5 h-5 md:w-6 md:h-6 transition-colors" />
             <Code className="cursor-pointer hover:text-[#c4a5ff] w-5 h-5 md:w-6 md:h-6 transition-colors" />
@@ -79,25 +101,25 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN MENU */}
+      {/* COMPACT MOBILE DROPDOWN MENU */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden absolute top-full left-0 w-full bg-[#0a081a]/95 backdrop-blur-xl border-b border-white/10 overflow-hidden shadow-2xl"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden absolute top-full left-0 w-full bg-[#0a081a]/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl z-40"
           >
-            <div className="flex flex-col items-center py-8 gap-6 font-sans tracking-widest text-xs uppercase font-bold">
-              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#about" onClick={closeMenu}>About</a>
-              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#tech-stack" onClick={closeMenu}>Tech Stack</a>
-              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#work" onClick={closeMenu}>Work</a>
-              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors" href="#contact" onClick={closeMenu}>Contact</a>
+            <div className="flex flex-col items-center py-8 gap-5 font-sans tracking-widest text-sm uppercase font-bold">
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'about')}>About</a>
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'tech-stack')}>Tech Stack</a>
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'work')}>Work</a>
+              <a className="text-slate-300 hover:text-[#c4a5ff] transition-colors cursor-pointer" onClick={(e) => handleNavClick(e, 'contact')}>Contact</a>
               
               <a 
-                className="mt-4 px-8 py-3 bg-[#c4a5ff] text-[#0a081a] font-black rounded-full hover:bg-[#d6c1ff] transition-all shadow-[0_0_15px_rgba(196,165,255,0.3)]" 
-                href="#resume"
-                onClick={closeMenu}
+                className="mt-2 px-8 py-3 bg-[#c4a5ff] text-[#0a081a] font-black rounded-full hover:bg-[#d6c1ff] transition-all shadow-[0_0_15px_rgba(196,165,255,0.3)] cursor-pointer" 
+                onClick={(e) => handleNavClick(e, 'resume')}
               >
                 Resume
               </a>
