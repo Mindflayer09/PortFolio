@@ -134,9 +134,14 @@ const Navbar = () => {
 const Hero = () => {
   return (
     <header className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-5 md:px-8 overflow-hidden">
-      {/* Background Orbs: Reduced size, opacity, and blur on mobile */}
-      <div className="absolute top-1/4 -left-10 md:-left-20 w-48 md:w-96 h-48 md:h-96 bg-primary/10 opacity-30 md:opacity-100 blur-[80px] md:blur-[120px] rounded-full"></div>
-      <div className="absolute bottom-1/4 -right-10 md:-right-20 w-48 md:w-96 h-48 md:h-96 bg-secondary/10 opacity-30 md:opacity-100 blur-[80px] md:blur-[120px] rounded-full"></div>
+      
+      {/* THE FIX: Pure CSS gradients instead of blurred divs so mobile doesn't wash out */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none" 
+        style={{ 
+          background: 'radial-gradient(circle at 15% 30%, rgba(209, 188, 255, 0.08) 0%, transparent 40%), radial-gradient(circle at 85% 70%, rgba(93, 230, 255, 0.05) 0%, transparent 40%)' 
+        }}
+      ></div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -183,16 +188,23 @@ const Hero = () => {
           <motion.a 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full sm:w-auto px-10 py-4 md:py-5 bg-surface-bright/20 backdrop-blur-md border border-outline-variant/15 text-primary font-bold text-base md:text-lg rounded-full hover:bg-surface-bright/40 transition-all duration-300 text-center"
-            href="#work"
+            className="w-full sm:w-auto px-10 py-4 md:py-5 bg-surface-bright/20 backdrop-blur-md border border-outline-variant/15 text-primary font-bold text-base md:text-lg rounded-full hover:bg-surface-bright/40 transition-all duration-300 text-center cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById('work');
+              if(el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({top: y, behavior: 'smooth'});
+              }
+            }}
           >
             View My Work
           </motion.a>
         </div>
       </motion.div>
       
-      {/* Lowered opacity of center radial gradient on mobile */}
-      <div className="absolute inset-0 z-0 opacity-5 md:opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #2b273c 0%, transparent 70%)' }}></div>
+      {/* Reduced opacity center gradient */}
+      <div className="absolute inset-0 z-0 opacity-10 md:opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #2b273c 0%, transparent 70%)' }}></div>
     </header>
   );
 };
@@ -421,8 +433,6 @@ const Contact = () => {
 
   return (
     <section className="py-20 md:py-32 px-5 md:px-8 bg-surface-container-low relative overflow-hidden" id="contact">
-      <div className="absolute top-0 right-0 w-125 h-125 bg-primary/10 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/3"></div>
-      
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         
         {/* LEFT COLUMN: Text & Info */}
@@ -573,7 +583,6 @@ const ResumeViewer = () => {
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white italic">MY <span className="text-primary font-light">RESUME.</span></h2>
         </div>
         
-        {/* MOBILE FIX: Added "hidden md:block" because mobile browsers cannot render PDF iframes inline */}
         <div className="hidden md:block w-full h-[80vh] min-h-100 md:min-h-200 rounded-2xl md:rounded-[2rem] overflow-hidden premium-card-border shadow-[0_20px_50px_rgba(145,94,255,0.1)] relative z-10 p-1 md:p-2 bg-surface-container-low/50">
           <iframe 
             src="/resume.pdf" 
@@ -583,9 +592,7 @@ const ResumeViewer = () => {
           />
         </div>
 
-        {/* Buttons: Added an "Open" button for mobile users, keeping the Download button for everyone */}
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4 relative z-10">
-          {/* This button only shows on mobile to replace the hidden iframe */}
           <a 
             href="/resume.pdf" 
             target="_blank"
@@ -604,8 +611,6 @@ const ResumeViewer = () => {
           </a>
         </div>
       </div>
-      
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 md:w-150 h-72 md:h-150 bg-primary/5 blur-[100px] md:blur-[150px] rounded-full -z-10"></div>
     </section>
   );
 };
@@ -682,9 +687,16 @@ export default function App() {
       
       <Footer />
       
-      {/* Background Decoration: Reduced opacity and blur on mobile so it doesn't fade the layout */}
-      <div className="fixed top-0 right-0 -z-10 w-64 md:w-200 h-64 md:h-200 bg-primary/5 opacity-20 md:opacity-100 blur-[80px] md:blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-      <div className="fixed bottom-0 left-0 -z-10 w-64 md:w-150 h-64 md:h-150 bg-secondary/5 opacity-20 md:opacity-100 blur-[80px] md:blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+      {/* THE FIX: Replaced global blurred divs with pure CSS radial gradients to stop mobile rendering wash-out */}
+      <div 
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 90% 10%, rgba(209, 188, 255, 0.05) 0%, transparent 40%),
+            radial-gradient(circle at 10% 90%, rgba(93, 230, 255, 0.05) 0%, transparent 40%)
+          `
+        }}
+      ></div>
     </div>
   );
 }
