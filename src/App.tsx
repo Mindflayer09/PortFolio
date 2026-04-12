@@ -316,7 +316,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       className="group relative premium-card-border rounded-3xl md:rounded-[2rem] overflow-hidden"
-      style={{ '--angle': `${angle}deg` } as any}
+      style={{ '--angle': `${angle}deg` } as React.CSSProperties}
     >
       <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
       
@@ -436,15 +436,14 @@ const Contact = () => {
     }
     
     try {
-      // ✅ CORRECT (Matches your EmailJS template)
       await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ID,
         {
-          name: formData.name,
-          email: formData.email,
+          from_name: formData.name,
+          from_email: formData.email,
           message: formData.message,
-          title: "New Inquiry from Portfolio",
+          subject: "New Inquiry from Portfolio",
         }
       );
       
