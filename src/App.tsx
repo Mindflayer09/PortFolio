@@ -4,6 +4,7 @@
  */
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { PROJECTS, SKILLS, SOCIALS } from './constants';
 import { 
   Terminal, 
@@ -407,6 +408,18 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
+  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID ?? '';
+  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? '';
+  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? '';
+
+  useEffect(() => {
+    if (!PUBLIC_KEY) {
+      console.warn('Missing EmailJS public key. Set VITE_EMAILJS_PUBLIC_KEY in your .env file.');
+      return;
+    }
+    emailjs.init(PUBLIC_KEY);
+  }, [PUBLIC_KEY]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -414,13 +427,36 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    setTimeout(() => {
+
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      console.error('Missing EmailJS configuration. Please set VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY in your .env file.');
+      setSubmitStatus('error');
       setIsSubmitting(false);
+      return;
+    }
+    
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_name: 'Sourabh Singh', // Your name
+        }
+      );
+      
       setSubmitStatus('success');
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setSubmitStatus('idle'), 4000);
-    }, 1500);
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus('idle'), 4000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

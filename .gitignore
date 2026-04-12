@@ -1,8 +1,19 @@
+# Dependencies
 node_modules/
+
+# Build and Output Directories
 build/
 dist/
+
+# Test Coverage
 coverage/
+
+# OS Generated Files
 .DS_Store
+
+# Logs
 *.log
+
+# Environment Variables
 .env*
 !.env.example
