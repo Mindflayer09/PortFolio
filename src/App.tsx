@@ -436,14 +436,15 @@ const Contact = () => {
     }
     
     try {
+      // ✅ CORRECT (Matches your EmailJS template)
       await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ID,
         {
-          from_name: formData.name,
-          from_email: formData.email,
+          name: formData.name,
+          email: formData.email,
           message: formData.message,
-          to_name: 'Sourabh Singh', // Your name
+          title: "New Inquiry from Portfolio",
         }
       );
       
